@@ -1,14 +1,12 @@
-
-
+import HomePage from './pages/HomePage';
+import Navbar from './layout/Navbar';
 function App() {
-
-  return (
-    <>
-    
-     <div className="text-blue-500 text-3xl">hello</div>
-      
-    </>
-  )
+	return (
+		<>
+			<Navbar />
+			<HomePage />
+		</>
+	);
 }
 
-export default App
+export default App;
