@@ -18,6 +18,7 @@ import {
 	ArrowRight,
 } from 'lucide-react';
 import Button from '../components/ui/Button';
+import SectionHeading from '../components/ui/SectionHeading';
 import { useEffect, useState } from 'react';
 
 const NavLinks = [
@@ -195,9 +196,7 @@ export default function Navbar() {
 						</div>
 						<div className="h-px w-full bg-[#e7f2ef]" />
 						<div className="py-6">
-							<h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
-								My Account
-							</h2>
+							<SectionHeading title="My Account" className="mb-4" />
 							<div className="flex flex-col gap-3">
 								<Button className="w-full justify-start gap-5 bg-white px-3 py-3 text-base font-medium text-slate-900 hover:bg-slate-50">
 									<UserRound
@@ -214,9 +213,7 @@ export default function Navbar() {
 						</div>
 						<div className="h-px w-full bg-[#e7f2ef]" />
 						<div className="pt-6">
-							<h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
-								More
-							</h2>
+							<SectionHeading title="More" className="mb-4" />
 
 							<div>
 								{MenuOptions.map((option) => {
