@@ -20,6 +20,7 @@ import {
 import Button from '../components/ui/Button';
 import SectionHeading from '../components/ui/SectionHeading';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 const NavLinks = [
 	{
@@ -61,6 +62,12 @@ const MenuOptions = [
 
 export default function Navbar() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const navigate = useNavigate();
+
+	const goToAuth = (path: '/signin' | '/signup') => {
+		setIsMenuOpen(false);
+		navigate(path);
+	};
 
 	useEffect(() => {
 		if (!isMenuOpen) return;
@@ -97,6 +104,7 @@ export default function Navbar() {
 					<div className="flex items-center gap-2">
 						<Button
 							label="Sign In"
+							onClick={() => navigate('/signin')}
 							className="
 							border border-slate-300
 							bg-white
@@ -108,7 +116,11 @@ export default function Navbar() {
 							hover:shadow-sm
 						"
 						/>
-						<Button label="Sign Up" className="text-white" />
+						<Button
+							label="Sign Up"
+							onClick={() => navigate('/signup')}
+							className="text-white"
+						/>
 					</div>
 				</div>
 				<div className="flex items-center gap-4 lg:hidden">
@@ -198,14 +210,20 @@ export default function Navbar() {
 						<div className="py-6">
 							<SectionHeading title="My Account" className="mb-4" />
 							<div className="flex flex-col gap-3">
-								<Button className="w-full justify-start gap-5 bg-white px-3 py-3 text-base font-medium text-slate-900 hover:bg-slate-50">
+								<Button
+									onClick={() => goToAuth('/signin')}
+									className="w-full justify-start gap-5 bg-white px-3 py-3 text-base font-medium text-slate-900 hover:bg-slate-50"
+								>
 									<UserRound
 										className="h-7 w-7 text-slate-900"
 										strokeWidth={1.8}
 									/>
 									Sign In
 								</Button>
-								<Button className="w-full justify-start gap-5 rounded-xl px-3 py-4 text-base font-medium text-white">
+								<Button
+									onClick={() => goToAuth('/signup')}
+									className="w-full justify-start gap-5 rounded-xl px-3 py-4 text-base font-medium text-white"
+								>
 									<UserRoundPlus className="h-7 w-7" strokeWidth={1.8} />
 									Sign Up
 								</Button>
@@ -246,6 +264,7 @@ export default function Navbar() {
 										</p>
 										<button
 											type="button"
+											onClick={() => goToAuth('/signup')}
 											className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#087A5B] hover:text-[#066A4F]"
 										>
 											Sign Up

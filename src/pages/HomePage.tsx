@@ -5,10 +5,13 @@ import AboutSection from '../components/homepage/AboutSection';
 import AgentSection from '../components/homepage/AgentSection';
 import TestimonialSection from '../components/homepage/TestimonialSection';
 import Cta from '../components/homepage/Cta';
+import Navbar from '../layout/Navbar';
+import Footer from '../layout/Footer';
 
 export default function HomePage() {
 	return (
 		<>
+			<Navbar />
 			<HeroSection />
 			<PropertySection />
 			<LocationSection />
@@ -16,6 +19,7 @@ export default function HomePage() {
 			<AgentSection />
 			<TestimonialSection />
 			<Cta />
+			<Footer />
 		</>
 	);
 }
