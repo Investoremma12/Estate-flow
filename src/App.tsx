@@ -5,6 +5,7 @@ import SignIn from './components/auth/SignIn';
 import PropertyPage from './pages/PropertyPage';
 import PropertyDetails from './pages/PropertyDetails';
 import AgentPage from './pages/AgentPage';
+import FavoritePage from './pages/FavoritePage';
 function App() {
 	return (
 		<div className="min-w-0 overflow-x-clip">
@@ -14,7 +15,8 @@ function App() {
 				<Route path="signin" element={<SignIn />} />
 				<Route path="properties" element={<PropertyPage />} />
 				<Route path="property/:id" element={<PropertyDetails />} />
-    <Route path="agent" element={<AgentPage />} />
+				<Route path="agent" element={<AgentPage />} />
+				<Route path="favorites" element={<FavoritePage />} />
 			</Routes>
 		</div>
 	);
