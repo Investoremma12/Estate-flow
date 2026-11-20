@@ -1,7 +1,7 @@
 import SectionHeading from '../ui/SectionHeading';
 import { ArrowRight } from 'lucide-react';
 import PropertyCard from '../propertypage/PropertyCards';
-import PropertyDetails from '../../data/PropertyDetails';
+import PropertyDetails from '../../data/Property';
 
 export default function PropertySection() {
 	return (

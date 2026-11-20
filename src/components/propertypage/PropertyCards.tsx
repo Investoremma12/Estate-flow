@@ -1,8 +1,9 @@
 import { Bath, BedDouble, Heart, MapPin, Maximize2 } from 'lucide-react';
-import PropertyDetails from '../../data/PropertyDetails';
+import Property from '../../data/Property';
 import fallbackImage from '../../assets/images/house1.jpg';
+import { Link } from 'react-router-dom'
 
-type Property = (typeof PropertyDetails)[number];
+type Property = (typeof Property)[number];
 
 interface PropertyCardProps {
 	properties?: Property[];
@@ -11,7 +12,7 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({
-	properties = PropertyDetails,
+	properties = Property,
 	gridClassName = 'mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3',
 	cardClassName = 'w-full',
 }: PropertyCardProps) {
@@ -20,6 +21,7 @@ export default function PropertyCard({
 			<div>
 				<div className={gridClassName}>
 					{properties.map((PropertyDetail) => (
+						<Link to={`/property/${PropertyDetail.id}`}>
 						<div
 							key={PropertyDetail.id}
 							className={`${cardClassName} overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-lg`}
@@ -80,7 +82,7 @@ export default function PropertyCard({
 									</span>
 								</div>
 							</div>
-						</div>
+						</div></Link>
 					))}
 				</div>
 			</div>

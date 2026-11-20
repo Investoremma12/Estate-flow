@@ -5,9 +5,8 @@ import { ChevronDown, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import SectionHeading from '../components/ui/SectionHeading';
 import filterIcon from '../assets/icons/filter.svg';
 import PropertyCard from '../components/propertypage/PropertyCards';
-import PropertyDetails from '../data/PropertyDetails';
+import Property from '../data/Property';
 import { useState } from 'react';
-
 const filterSections = [
 	{
 		title: 'Listing Type',
@@ -35,8 +34,8 @@ const filterSections = [
 export default function PropertyPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const propertiesPerPage = 12;
-	const totalPages = Math.ceil(PropertyDetails.length / propertiesPerPage);
-	const visibleProperties = PropertyDetails.slice(
+	const totalPages = Math.ceil(Property.length / propertiesPerPage);
+	const visibleProperties = Property.slice(
 		(currentPage - 1) * propertiesPerPage,
 		currentPage * propertiesPerPage,
 	);
@@ -103,7 +102,7 @@ export default function PropertyPage() {
 					</form>
 				</div>
 			</section>
-			<div className="flex items-stretch font-poppins">
+			<div className="flex flex-col items-stretch font-poppins lg:flex-row">
 				{/*side bar*/}
 				<aside className="w-full shrink-0 border-b border-slate-200 bg-white px-4 py-5 sm:px-6 lg:w-64 lg:border-b-0 lg:border-r lg:px-5 lg:py-6">
 					<div className="flex items-center justify-between border-b border-slate-100 pb-4">
@@ -167,7 +166,7 @@ export default function PropertyPage() {
 				<main className="min-h-96 flex-1 bg-slate-50 p-6 lg:p-8">
 					<div className="flex items-center justify-between gap-2">
 						<p className="font-semibold text-lg tracking-wide text-black/90">
-							{PropertyDetails.length} Properties found
+							{Property.length} Properties found
 						</p>
 						<div className="flex items-center gap-2">
 							<p className="text-sm text-slate-700">Sort by:</p>

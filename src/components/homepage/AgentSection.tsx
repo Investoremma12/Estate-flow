@@ -1,55 +1,10 @@
 import { Star, ArrowRight } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
+import agentData from '../../data/agentsData';
 
-interface Agent {
-	id: number;
-	name: string;
-	role: string;
-	rating: number;
-	reviews: number;
-	image: string;
-}
-
-const agentsData: Agent[] = [
-	{
-		id: 1,
-		name: 'Sarah Johnson',
-		role: 'Senior Real Estate Agent',
-		rating: 4.9,
-		reviews: 124,
-		image:
-			'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200',
-	},
-	{
-		id: 2,
-		name: 'Michael Chen',
-		role: 'Real Estate Agent',
-		rating: 4.8,
-		reviews: 98,
-		image:
-			'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200',
-	},
-	{
-		id: 3,
-		name: 'Emily Rodriguez',
-		role: 'Real Estate Agent',
-		rating: 4.9,
-		reviews: 87,
-		image:
-			'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200&h=200',
-	},
-	{
-		id: 4,
-		name: 'David Wilson',
-		role: 'Senior Real Estate Agent',
-		rating: 4.7,
-		reviews: 76,
-		image:
-			'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200&h=200',
-	},
-];
 
 export default function AgentSection() {
+	const agentsData = agentData.slice(0, 4); // Use the imported agent data
 	return (
 		<section className="bg-white py-16 sm:py-20 font-poppins">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

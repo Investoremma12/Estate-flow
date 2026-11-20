@@ -20,7 +20,7 @@ import {
 import Button from '../components/ui/Button';
 import SectionHeading from '../components/ui/SectionHeading';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 const NavLinks = [
 	{
@@ -30,10 +30,12 @@ const NavLinks = [
 	{
 		links: 'Properties',
 		icons: Home,
+		path: '/properties',
 	},
 	{
 		links: 'Agents',
 		icons: Users,
+		path: '/agent',
 	},
 	{
 		links: 'About',
@@ -69,6 +71,11 @@ export default function Navbar() {
 		navigate(path);
 	};
 
+	const goToNavLink = (path?: string) => {
+		setIsMenuOpen(false);
+		if (path) navigate(path);
+	};
+
 	useEffect(() => {
 		if (!isMenuOpen) return;
 
@@ -89,13 +96,15 @@ export default function Navbar() {
 					<div className="font-bold text-lg text-black/80 ">EstateFlow</div>
 				</div>
 				<div className="hidden lg:flex items-center gap-8">
-					{NavLinks.map((Navlink, index) => (
-						<p
-							key={index}
-							className="font-semibold text-sm hover:text-[#087A5B] cursor-pointer"
+					{NavLinks.map((Navlink) => (
+						<button
+							type="button"
+							key={Navlink.links}
+							className="border-0 bg-transparent p-0 font-semibold text-sm hover:text-[#087A5B] cursor-pointer"
+							onClick={() => goToNavLink(Navlink.path)}
 						>
 							{Navlink.links}
-						</p>
+						</button>
 					))}
 				</div>
 				<div className="hidden lg:flex items-center gap-4">
@@ -198,7 +207,7 @@ export default function Navbar() {
 										type="button"
 										key={navLink.links}
 										className="flex items-center rounded-lg px-3 py-3 w-full text-left text-lg font-medium text-black/80 transition-colors hover:bg-emerald-50"
-										onClick={() => setIsMenuOpen(false)}
+										onClick={() => goToNavLink(navLink.path)}
 									>
 										<Icon className="mr-3 h-6 w-6" aria-hidden="true" />
 										{navLink.links}
