@@ -14,11 +14,16 @@ import Button from '../components/ui/Button';
 import AgentCard from '../components/agentpage/AgentCard';
 import SectionHeading from '../components/ui/SectionHeading';
 import agentsData from '../data/agentsData';
+import {
+	agentBenefits,
+	agentSortOptions,
+	agentsPerPage,
+	type AgentSortOption,
+} from '../data/agentPageData';
 import HeroBackground from '../assets/images/house9.jpg';
 import Navbar from '../layout/Navbar';
 
 type Agent = (typeof agentsData)[number];
-type SortOption = 'popular' | 'rating' | 'sales' | 'experience';
 
 interface AgentProfileDialogProps {
 	agent: Agent;
@@ -146,10 +151,9 @@ function AgentProfileDialog({ agent, onClose }: AgentProfileDialogProps) {
 
 export default function AgentPage() {
 	const [searchQuery, setSearchQuery] = useState('');
-	const [sortOption, setSortOption] = useState<SortOption>('popular');
+	const [sortOption, setSortOption] = useState<AgentSortOption>('popular');
 	const [currentPage, setCurrentPage] = useState(1);
 	const [activeAgentId, setActiveAgentId] = useState<number | null>(null);
-	const agentsPerPage = 6;
 	const query = searchQuery.trim().toLowerCase();
 
 	const filteredAgents = agentsData.filter((agent) =>
@@ -263,15 +267,16 @@ export default function AgentPage() {
 								<select
 									value={sortOption}
 									onChange={(event) => {
-										setSortOption(event.target.value as SortOption);
+										setSortOption(event.target.value as AgentSortOption);
 										setCurrentPage(1);
 									}}
 									className="min-h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-600"
 								>
-									<option value="popular">Most Popular</option>
-									<option value="rating">Highest Rated</option>
-									<option value="sales">Most Sales</option>
-									<option value="experience">Most Experience</option>
+									{agentSortOptions.map(({ value, label }) => (
+										<option key={value} value={value}>
+											{label}
+										</option>
+									))}
 								</select>
 							</label>
 						</div>
@@ -367,27 +372,15 @@ export default function AgentPage() {
 								Why Work With Us?
 							</h2>
 							<ul className="mt-4 space-y-3 text-sm text-slate-600">
-								<li className="flex items-start gap-2">
-									<CheckCircle2
-										className="mt-0.5 h-4 w-4 shrink-0 text-[#087A5B]"
-										aria-hidden="true"
-									/>
-									Local market knowledge
-								</li>
-								<li className="flex items-start gap-2">
-									<CheckCircle2
-										className="mt-0.5 h-4 w-4 shrink-0 text-[#087A5B]"
-										aria-hidden="true"
-									/>
-									Specialists across property types
-								</li>
-								<li className="flex items-start gap-2">
-									<CheckCircle2
-										className="mt-0.5 h-4 w-4 shrink-0 text-[#087A5B]"
-										aria-hidden="true"
-									/>
-									Experience backed by client reviews
-								</li>
+								{agentBenefits.map((benefit) => (
+									<li key={benefit} className="flex items-start gap-2">
+										<CheckCircle2
+											className="mt-0.5 h-4 w-4 shrink-0 text-[#087A5B]"
+											aria-hidden="true"
+										/>
+										{benefit}
+									</li>
+								))}
 							</ul>
 
 							<div className="mt-5 rounded-lg bg-emerald-50 p-3">

@@ -7,33 +7,16 @@ import filterIcon from '../assets/icons/filter.svg';
 import PropertyCard from '../components/propertypage/PropertyCards';
 import Property from '../data/Property';
 import { useState } from 'react';
-const filterSections = [
-	{
-		title: 'Listing Type',
-		options: ['For Sale', 'For Rent'],
-	},
-	{
-		title: 'Property Type',
-		options: ['House', 'Apartment', 'Villa', 'Land'],
-	},
-	{
-		title: 'Price Range',
-		options: [
-			'Under $300,000',
-			'$300,000 - $500,000',
-			'$500,000 - $1,000,000',
-			'$1,000,000+',
-		],
-	},
-	{
-		title: 'Bedrooms',
-		options: ['Any', '1+', '2+', '3+', '4+'],
-	},
-];
+import {
+	propertiesPerPage,
+	propertyFilterSections,
+	propertyPriceRanges,
+	propertySortOptions,
+	propertyTypes,
+} from '../data/propertyPageData';
 
 export default function PropertyPage() {
 	const [currentPage, setCurrentPage] = useState(1);
-	const propertiesPerPage = 12;
 	const totalPages = Math.ceil(Property.length / propertiesPerPage);
 	const visibleProperties = Property.slice(
 		(currentPage - 1) * propertiesPerPage,
@@ -82,9 +65,9 @@ export default function PropertyPage() {
 							<option value="" disabled>
 								Property Type
 							</option>
-							<option>House</option>
-							<option>Apartment</option>
-							<option>Villa</option>
+							{propertyTypes.map((propertyType) => (
+								<option key={propertyType}>{propertyType}</option>
+							))}
 						</select>
 						<select
 							aria-label="Price range"
@@ -94,9 +77,9 @@ export default function PropertyPage() {
 							<option value="" disabled>
 								Price Range
 							</option>
-							<option>Under $300k</option>
-							<option>$300k - $600k</option>
-							<option>Over $600k</option>
+							{propertyPriceRanges.map((priceRange) => (
+								<option key={priceRange}>{priceRange}</option>
+							))}
 						</select>
 						<Button type="submit" label="Search" className=" text-white" />
 					</form>
@@ -127,7 +110,7 @@ export default function PropertyPage() {
 					</div>
 
 					<div>
-						{filterSections.map((section) => (
+						{propertyFilterSections.map((section) => (
 							<div
 								key={section.title}
 								className="border-b border-slate-100 py-4 last:border-b-0"
@@ -178,9 +161,9 @@ export default function PropertyPage() {
 								<option value="" disabled>
 									Newest First
 								</option>
-								<option>Recomended First</option>
-								<option>Lowest Price First</option>
-								<option>Highest price First</option>
+								{propertySortOptions.map((sortOption) => (
+									<option key={sortOption}>{sortOption}</option>
+								))}
 							</select>
 						</div>
 					</div>

@@ -40,10 +40,12 @@ const NavLinks = [
 	{
 		links: 'About',
 		icons: Info,
+		path: '/about',
 	},
 	{
 		links: 'Contact',
 		icons: Mail,
+		path: '/contact',
 	},
 ];
 

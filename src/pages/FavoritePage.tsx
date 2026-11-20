@@ -4,13 +4,19 @@ import { Link } from 'react-router-dom';
 import PropertyCard from '../components/propertypage/PropertyCards';
 import Property from '../data/Property';
 import HeroBackground from '../assets/images/house9.jpg';
+import {
+	favoriteSortOptions,
+	initialFavoritePropertyIds,
+	type FavoriteSortOption,
+} from '../data/favoritePageData';
 import Navbar from '../layout/Navbar';
 
-type SortOption = 'newest' | 'price-low' | 'price-high';
-
 export default function FavoritePage() {
-	const [savedPropertyIds, setSavedPropertyIds] = useState([1, 2, 3]);
-	const [sortOption, setSortOption] = useState<SortOption>('newest');
+	const [savedPropertyIds, setSavedPropertyIds] = useState([
+		...initialFavoritePropertyIds,
+	]);
+	const [sortOption, setSortOption] =
+		useState<FavoriteSortOption>('newest');
 	const savedProperties = useMemo(() => {
 		const properties = Property.filter((property) =>
 			savedPropertyIds.includes(property.id),
@@ -48,10 +54,10 @@ export default function FavoritePage() {
 				className="relative isolate overflow-hidden bg-cover bg-center"
 				style={{ backgroundImage: `url(${HeroBackground})` }}
 			>
-				<div className="absolute inset-0 -z-10 bg-gradient-to-r from-white/95 via-white/75 to-white/10" />
+				<div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/80 via-slate-950/55 to-slate-950/10" />
 				<div className="mx-auto flex min-h-36 max-w-7xl items-center px-4 py-6 sm:min-h-40 sm:px-6 lg:px-8">
 					<div>
-						<h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+						<h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
 							<Heart
 								className="h-9 w-9 shrink-0 text-[#087A5B]"
 								strokeWidth={1.8}
@@ -59,7 +65,7 @@ export default function FavoritePage() {
 							/>
 							My Favorites
 						</h1>
-						<p className="mt-1 text-sm font-medium text-slate-700 sm:text-base">
+						<p className="mt-1 text-sm font-medium text-white sm:text-base">
 							Your saved properties, all in one place.
 						</p>
 					</div>
@@ -83,13 +89,15 @@ export default function FavoritePage() {
 							<select
 								value={sortOption}
 								onChange={(event) =>
-									setSortOption(event.target.value as SortOption)
+									setSortOption(event.target.value as FavoriteSortOption)
 								}
 								className="min-h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-600"
 							>
-								<option value="newest">Newest First</option>
-								<option value="price-low">Price: Low to High</option>
-								<option value="price-high">Price: High to Low</option>
+								{favoriteSortOptions.map(({ value, label }) => (
+									<option key={value} value={value}>
+										{label}
+									</option>
+								))}
 							</select>
 						</label>
 					</div>
