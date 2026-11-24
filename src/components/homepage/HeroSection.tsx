@@ -1,8 +1,11 @@
 import HeroBackground from '../../assets/images/house9.jpg';
 import Button from '../ui/Button';
 import { Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function HeroSection() {
+	const navigate = useNavigate();
+
 	return (
 		<section
 			className="relative isolate min-h-[28rem] overflow-hidden bg-cover bg-center bg-no-repeat sm:min-h-[34rem]"
@@ -25,7 +28,13 @@ export default function HeroSection() {
 					</p>
 				</div>
 
-				<form className="mt-10 grid max-w-5xl gap-2 rounded-xl bg-white/95 p-2 shadow-2xl backdrop-blur-sm md:grid-cols-[minmax(0,1.7fr)_minmax(9rem,0.8fr)_minmax(9rem,0.8fr)_auto] md:gap-2">
+				<form
+					onSubmit={(event) => {
+						event.preventDefault();
+						navigate('/properties');
+					}}
+					className="mt-10 grid max-w-5xl gap-2 rounded-xl bg-white/95 p-2 shadow-2xl backdrop-blur-sm md:grid-cols-[minmax(0,1.7fr)_minmax(9rem,0.8fr)_minmax(9rem,0.8fr)_auto] md:gap-2"
+				>
 					<label className="flex min-h-12 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-slate-400">
 						<Search className="h-4 w-4 shrink-0" aria-hidden="true" />
 						<input

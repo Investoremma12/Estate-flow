@@ -1,6 +1,7 @@
 import { Star, ArrowRight } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 import agentData from '../../data/agentsData';
+import { Link } from 'react-router-dom';
 
 
 export default function AgentSection() {
@@ -23,13 +24,13 @@ export default function AgentSection() {
 						</p>
 					</div>
 
-					<a
-						href="#all-agents"
+					<Link
+						to="/agent"
 						className="inline-flex items-center text-sm font-semibold text-[#087A5B] transition-colors hover:text-[#066A4F]"
 					>
 						View All Agents
 						<ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
-					</a>
+					</Link>
 				</div>
 
 				<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -64,13 +65,13 @@ export default function AgentSection() {
 									</span>
 								</div>
 
-								<a
-									href={`#profile-${agent.id}`}
+								<Link
+									to="/agent"
 									className="mt-3 inline-flex items-center text-xs font-semibold text-[#087A5B] transition-colors hover:text-[#066A4F]"
 								>
 									View Profile
 									<ArrowRight className="ml-1 h-3.5 w-3.5" />
-								</a>
+								</Link>
 							</div>
 						</div>
 					))}

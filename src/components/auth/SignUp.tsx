@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import HeaderImage from '../../assets/images/header-icon.png';
 import { registerUser } from '../../data/authStorage';
@@ -42,13 +42,17 @@ export default function SignUp() {
 		isError: boolean;
 	} | null>(null);
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	useEffect(() => {
 		if (!submitMessage || submitMessage.isError) return;
 
-		const timeoutId = window.setTimeout(() => navigate('/signin'), 1700);
+		const timeoutId = window.setTimeout(
+			() => navigate('/signin', { state: location.state, replace: true }),
+			1700,
+		);
 		return () => window.clearTimeout(timeoutId);
-	}, [navigate, submitMessage]);
+	}, [location.state, navigate, submitMessage]);
 
 	const {
 		register,

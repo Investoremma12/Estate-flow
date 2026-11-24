@@ -2,8 +2,11 @@ import SectionHeading from '../ui/SectionHeading';
 import { ArrowRight } from 'lucide-react';
 import PropertyCard from '../propertypage/PropertyCards';
 import PropertyDetails from '../../data/Property';
+import { useNavigate } from 'react-router-dom';
 
 export default function PropertySection() {
+	const navigate = useNavigate();
+
 	return (
 		<>
 			<section>
@@ -22,6 +25,7 @@ export default function PropertySection() {
 						<div>
 							<button
 								type="button"
+								onClick={() => navigate('/properties')}
 								className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#087A5B] hover:text-[#066A4F]"
 							>
 								view all properties

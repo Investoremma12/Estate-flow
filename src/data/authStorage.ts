@@ -83,6 +83,75 @@ function getStoredUsers(): StoredUser[] {
 	return parsedUsers as StoredUser[];
 }
 
+function isAuthSession(value: unknown): value is AuthSession {
+	if (
+		typeof value !== 'object' ||
+		value === null ||
+		!('user' in value) ||
+		!('authenticatedAt' in value)
+	) {
+		return false;
+	}
+
+	const user = value.user;
+	return (
+		typeof user === 'object' &&
+		user !== null &&
+		'fullName' in user &&
+		typeof user.fullName === 'string' &&
+		'email' in user &&
+		typeof user.email === 'string' &&
+		typeof value.authenticatedAt === 'string'
+	);
+}
+
+function getStoredSession(storage: Storage): AuthSession | null {
+	const storedSession = storage.getItem(SESSION_STORAGE_KEY);
+	if (!storedSession) return null;
+
+	let parsedSession: unknown;
+	try {
+		parsedSession = JSON.parse(storedSession);
+	} catch (error) {
+		if (!(error instanceof SyntaxError)) throw error;
+		storage.removeItem(SESSION_STORAGE_KEY);
+		return null;
+	}
+
+	if (!isAuthSession(parsedSession)) {
+		storage.removeItem(SESSION_STORAGE_KEY);
+		return null;
+	}
+
+	return parsedSession;
+}
+
+export function getCurrentAuthUser(): AuthUser | null {
+	return (
+		getStoredSession(localStorage)?.user ??
+		getStoredSession(sessionStorage)?.user ??
+		null
+	);
+}
+
+export function signOutUser(): void {
+	localStorage.removeItem(SESSION_STORAGE_KEY);
+	sessionStorage.removeItem(SESSION_STORAGE_KEY);
+}
+
+export function deleteUserAccount(email: string): void {
+	const normalizedEmail = email.trim().toLowerCase();
+	const users = getStoredUsers();
+	const remainingUsers = users.filter((user) => user.email !== normalizedEmail);
+
+	if (remainingUsers.length === users.length) {
+		throw new Error('This account could not be found. Please sign in again and retry.');
+	}
+
+	localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(remainingUsers));
+	signOutUser();
+}
+
 export async function registerUser(data: SignUpData): Promise<AuthUser> {
 	const email = data.email.trim().toLowerCase();
 	const users = getStoredUsers();

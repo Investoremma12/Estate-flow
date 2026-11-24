@@ -1,7 +1,10 @@
 import { ArrowRight } from 'lucide-react';
 import Button from '../ui/Button';
+import { useNavigate } from 'react-router-dom';
 
 export default function Cta() {
+	const navigate = useNavigate();
+
 	return (
 		<section
 			className="relative overflow-hidden bg-[#0F2E22] py-8 font-poppins"
@@ -37,6 +40,7 @@ export default function Cta() {
 
 				<Button
 					type="button"
+					onClick={() => navigate('/properties')}
 					className="relative z-10 w-fit shrink-0 gap-2 rounded-lg bg-emerald-50 px-5 py-3 text-sm font-semibold text-emerald-900 hover:bg-white"
 				>
 					Explore Properties

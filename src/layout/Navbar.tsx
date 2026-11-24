@@ -16,11 +16,21 @@ import {
 	Bookmark,
 	Settings,
 	ArrowRight,
+	LogOut,
+	Trash2,
+	AlertTriangle,
 } from 'lucide-react';
 import Button from '../components/ui/Button';
 import SectionHeading from '../components/ui/SectionHeading';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+	deleteUserAccount,
+	getCurrentAuthUser,
+	signOutUser,
+	type AuthUser,
+} from '../data/authStorage';
 
 const NavLinks = [
 	{
@@ -65,8 +75,16 @@ const MenuOptions = [
 	},
 ];
 
+type AccountConfirmation = 'signOut' | 'deleteAccount';
+
 export default function Navbar() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [currentUser, setCurrentUser] = useState<AuthUser | null>(() =>
+		getCurrentAuthUser(),
+	);
+	const [confirmationAction, setConfirmationAction] =
+		useState<AccountConfirmation | null>(null);
+	const [confirmationError, setConfirmationError] = useState('');
 	const navigate = useNavigate();
 
 	const goToAuth = (path: '/signin' | '/signup') => {
@@ -84,19 +102,67 @@ export default function Navbar() {
 		navigate('/favorites');
 	};
 
+	const goToMenuOption = (option: string) => {
+		if (option === 'Saved Properties' || option === 'Favorites') {
+			goToFavorites();
+			return;
+		}
+		setIsMenuOpen(false);
+	};
+
+	const openConfirmation = (action: AccountConfirmation) => {
+		setConfirmationError('');
+		setIsMenuOpen(false);
+		setConfirmationAction(action);
+	};
+
+	const closeConfirmation = () => {
+		setConfirmationAction(null);
+		setConfirmationError('');
+	};
+
+	const confirmAccountAction = () => {
+		if (!confirmationAction || !currentUser) return;
+
+		setConfirmationError('');
+		try {
+			if (confirmationAction === 'deleteAccount') {
+				deleteUserAccount(currentUser.email);
+			} else {
+				signOutUser();
+			}
+
+			const redirectTo =
+				confirmationAction === 'deleteAccount' ? '/signup' : '/signin';
+			setCurrentUser(null);
+			closeConfirmation();
+			navigate(redirectTo, { replace: true });
+		} catch (error) {
+			setConfirmationError(
+				error instanceof Error
+					? error.message
+					: 'Unable to complete this action. Please try again.',
+			);
+		}
+	};
+
 	useEffect(() => {
-		if (!isMenuOpen) return;
+		if (!isMenuOpen && !confirmationAction) return;
 
 		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') setIsMenuOpen(false);
+			if (event.key === 'Escape') {
+				setIsMenuOpen(false);
+				closeConfirmation();
+			}
 		};
 
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
-	}, [isMenuOpen]);
+	}, [confirmationAction, isMenuOpen]);
 
 	return (
-		<nav className="relative z-20 mx-auto bg-white px-4 py-4 sm:px-6 lg:px-8">
+		<>
+			<nav className="relative z-20 mx-auto bg-white px-4 py-4 sm:px-6 lg:px-8">
 			{/* Desktop Menu */}
 			<div className="mx-auto flex max-w-7xl items-center justify-between font-poppins">
 				<button
@@ -123,11 +189,27 @@ export default function Navbar() {
 						<Heart className="w-6 h-6 text-gray-700" />
 					</button>
 
-					<div className="flex items-center gap-2">
-						<Button
-							label="Sign In"
-							onClick={() => navigate('/signin')}
-							className="
+					{currentUser ? (
+						<div className="flex items-center gap-2">
+							<button
+								type="button"
+								onClick={() => openConfirmation('deleteAccount')}
+								className="rounded-md border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-50"
+							>
+								Delete Account
+							</button>
+							<Button
+								label="Sign Out"
+								onClick={() => openConfirmation('signOut')}
+								className="text-white"
+							/>
+						</div>
+					) : (
+						<div className="flex items-center gap-2">
+							<Button
+								label="Sign In"
+								onClick={() => navigate('/signin')}
+								className="
 							border border-slate-300
 							bg-white
 							text-black
@@ -137,13 +219,14 @@ export default function Navbar() {
 							hover:text-emerald-700
 							hover:shadow-sm
 						"
-						/>
-						<Button
-							label="Sign Up"
-							onClick={() => navigate('/signup')}
-							className="text-white"
-						/>
-					</div>
+							/>
+							<Button
+								label="Sign Up"
+								onClick={() => navigate('/signup')}
+								className="text-white"
+							/>
+						</div>
+					)}
 				</div>
 				<div className="flex items-center gap-4 lg:hidden">
 					<button
@@ -204,7 +287,9 @@ export default function Navbar() {
 								</button>
 								<div className="flex flex-col gap-0.5">
 									<p className="text-xs text-slate-500">Good Morning,</p>
-									<p className="text-base font-bold text-slate-900">Guest</p>
+									<p className="max-w-40 truncate text-base font-bold text-slate-900">
+										{currentUser?.fullName ?? 'Guest'}
+									</p>
 								</div>
 							</div>
 							<button>
@@ -232,23 +317,45 @@ export default function Navbar() {
 						<div className="py-6">
 							<SectionHeading title="My Account" className="mb-4" />
 							<div className="flex flex-col gap-3">
-								<Button
-									onClick={() => goToAuth('/signin')}
-									className="w-full justify-start gap-5 bg-white px-3 py-3 text-base font-medium text-slate-900 hover:bg-slate-50"
-								>
-									<UserRound
-										className="h-7 w-7 text-slate-900"
-										strokeWidth={1.8}
-									/>
-									Sign In
-								</Button>
-								<Button
-									onClick={() => goToAuth('/signup')}
-									className="w-full justify-start gap-5 rounded-xl px-3 py-4 text-base font-medium text-white"
-								>
-									<UserRoundPlus className="h-7 w-7" strokeWidth={1.8} />
-									Sign Up
-								</Button>
+								{currentUser ? (
+									<>
+										<Button
+											onClick={() => openConfirmation('signOut')}
+											className="w-full justify-start gap-5 rounded-xl px-3 py-4 text-base font-medium text-white"
+										>
+											<LogOut className="h-7 w-7" strokeWidth={1.8} />
+											Sign Out
+										</Button>
+										<button
+											type="button"
+											onClick={() => openConfirmation('deleteAccount')}
+											className="flex w-full items-center gap-5 rounded-xl border border-red-200 bg-white px-3 py-3 text-left text-base font-medium text-red-700 transition-colors hover:bg-red-50"
+										>
+											<Trash2 className="h-7 w-7" strokeWidth={1.8} />
+											Delete Account
+										</button>
+									</>
+								) : (
+									<>
+										<Button
+											onClick={() => goToAuth('/signin')}
+											className="w-full justify-start gap-5 bg-white px-3 py-3 text-base font-medium text-slate-900 hover:bg-slate-50"
+										>
+											<UserRound
+												className="h-7 w-7 text-slate-900"
+												strokeWidth={1.8}
+											/>
+											Sign In
+										</Button>
+										<Button
+											onClick={() => goToAuth('/signup')}
+											className="w-full justify-start gap-5 rounded-xl px-3 py-4 text-base font-medium text-white"
+										>
+											<UserRoundPlus className="h-7 w-7" strokeWidth={1.8} />
+											Sign Up
+										</Button>
+									</>
+								)}
 							</div>
 						</div>
 						<div className="h-px w-full bg-[#e7f2ef]" />
@@ -263,7 +370,7 @@ export default function Navbar() {
 											type="button"
 											key={option.links}
 											className="flex items-center rounded-lg px-3 py-3 w-full text-left text-lg font-medium text-black/80 transition-colors hover:bg-emerald-50"
-											onClick={() => setIsMenuOpen(false)}
+											onClick={() => goToMenuOption(option.links)}
 										>
 											<Icon className="mr-3 h-6 w-6" aria-hidden="true" />
 											{option.links}
@@ -271,30 +378,32 @@ export default function Navbar() {
 									);
 								})}
 							</div>
-							<div className="mt-8 rounded-xl bg-[#eaf4f1] p-4">
-								<div className="flex items-start gap-4">
-									<div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#c8e7dc] text-[#087A5B]">
-										<img src={HeaderImage} alt="" className="h-8 w-10" />
-									</div>
-									<div className="min-w-0">
-										<h3 className="text-base font-semibold leading-6 text-slate-900">
-											Find your dream home
-										</h3>
-										<p className="mt-1 text-sm leading-5 text-slate-700">
-											Create an account to save properties, get personalized
-											recommendations and more.
-										</p>
-										<button
-											type="button"
-											onClick={() => goToAuth('/signup')}
-											className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#087A5B] hover:text-[#066A4F]"
-										>
-											Sign Up
-											<ArrowRight className="h-4 w-4" />
-										</button>
+							{!currentUser && (
+								<div className="mt-8 rounded-xl bg-[#eaf4f1] p-4">
+									<div className="flex items-start gap-4">
+										<div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#c8e7dc] text-[#087A5B]">
+											<img src={HeaderImage} alt="" className="h-8 w-10" />
+										</div>
+										<div className="min-w-0">
+											<h3 className="text-base font-semibold leading-6 text-slate-900">
+												Find your dream home
+											</h3>
+											<p className="mt-1 text-sm leading-5 text-slate-700">
+												Create an account to save properties, get personalized
+												recommendations and more.
+											</p>
+											<button
+												type="button"
+												onClick={() => goToAuth('/signup')}
+												className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#087A5B] hover:text-[#066A4F]"
+											>
+												Sign Up
+												<ArrowRight className="h-4 w-4" />
+											</button>
+										</div>
 									</div>
 								</div>
-							</div>
+							)}
 						</div>
 
 						<footer className="relative mt-8 min-h-36 overflow-hidden border-t border-[#e7f2ef] pt-5">
@@ -312,5 +421,106 @@ export default function Navbar() {
 				</div>
 			)}
 		</nav>
+		<AnimatePresence>
+			{confirmationAction && currentUser && (
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					transition={{ duration: 0.22 }}
+					className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/55 px-5 py-8 backdrop-blur-sm"
+					onClick={(event) => {
+						if (event.target === event.currentTarget) closeConfirmation();
+					}}
+				>
+					<motion.div
+						initial={{ opacity: 0, y: 22, scale: 0.96 }}
+						animate={{ opacity: 1, y: 0, scale: 1 }}
+						exit={{ opacity: 0, y: 12, scale: 0.97 }}
+						transition={{ type: 'spring', stiffness: 280, damping: 26 }}
+						role="alertdialog"
+						aria-modal="true"
+						aria-labelledby="account-confirmation-title"
+						aria-describedby="account-confirmation-description"
+						className="relative w-full max-w-md rounded-3xl border border-white/70 bg-white p-7 shadow-2xl shadow-slate-950/25 sm:p-8"
+					>
+						<button
+							type="button"
+							aria-label="Close confirmation"
+							onClick={closeConfirmation}
+							className="absolute right-4 top-4 rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+						>
+							<X size={18} />
+						</button>
+						<div
+							className={`mb-5 flex h-12 w-12 items-center justify-center rounded-2xl ${
+								confirmationAction === 'deleteAccount'
+									? 'bg-red-50 text-red-600'
+									: 'bg-emerald-50 text-emerald-700'
+							}`}
+						>
+							{confirmationAction === 'deleteAccount' ? (
+								<AlertTriangle size={23} />
+							) : (
+								<LogOut size={22} />
+							)}
+						</div>
+						<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+							{confirmationAction === 'deleteAccount'
+								? 'Account deletion'
+								: 'Sign out'}
+						</p>
+						<h2
+							id="account-confirmation-title"
+							className="mt-2 text-2xl font-semibold tracking-tight text-slate-950"
+						>
+							{confirmationAction === 'deleteAccount'
+								? 'Are you sure you want to delete your account?'
+								: 'Are you sure you want to sign out?'}
+						</h2>
+						<p
+							id="account-confirmation-description"
+							className="mt-3 text-sm leading-6 text-slate-600"
+						>
+							{confirmationAction === 'deleteAccount'
+								? 'This permanently deletes your EstateFlow account and cannot be undone.'
+								: 'You can sign back in anytime to continue your EstateFlow journey.'}
+						</p>
+						<p className="mt-2 text-sm font-medium text-slate-800">
+							{currentUser.email}
+						</p>
+						{confirmationError && (
+							<p className="mt-4 text-sm text-red-600" role="alert">
+								{confirmationError}
+							</p>
+						)}
+						<div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+							<button
+								type="button"
+								autoFocus
+								onClick={closeConfirmation}
+								className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+							>
+								Cancel
+							</button>
+							<button
+								type="button"
+								onClick={confirmAccountAction}
+								className={`rounded-xl px-5 py-3 text-sm font-semibold text-white transition-colors ${
+									confirmationAction === 'deleteAccount'
+										? 'bg-red-600 hover:bg-red-700'
+										: 'bg-emerald-800 hover:bg-emerald-900'
+								}`}
+							>
+								{confirmationAction === 'deleteAccount'
+									? 'Delete Account'
+									: 'Sign Out'}
+							</button>
+						</div>
+					</motion.div>
+				</motion.div>
+			)}
+		</AnimatePresence>
+		</>
 	);
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import HeaderImage from '../../assets/images/header-icon.png';
 import { signInUser } from '../../data/authStorage';
@@ -23,6 +23,14 @@ interface SignInFormData {
 	rememberMe: boolean;
 }
 
+interface AuthNavigationState {
+	from?: {
+		pathname?: string;
+		search?: string;
+		hash?: string;
+	};
+}
+
 export default function SignIn() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [submitMessage, setSubmitMessage] = useState<{
@@ -30,13 +38,22 @@ export default function SignIn() {
 		isError: boolean;
 	} | null>(null);
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	useEffect(() => {
 		if (!submitMessage || submitMessage.isError) return;
 
-		const timeoutId = window.setTimeout(() => navigate('/'), 1400);
+		const from = (location.state as AuthNavigationState | null)?.from;
+		const destination =
+			from?.pathname?.startsWith('/') && !from.pathname.startsWith('//')
+				? `${from.pathname}${from.search ?? ''}${from.hash ?? ''}`
+				: '/';
+		const timeoutId = window.setTimeout(
+			() => navigate(destination, { replace: true }),
+			1400,
+		);
 		return () => window.clearTimeout(timeoutId);
-	}, [navigate, submitMessage]);
+	}, [location.state, navigate, submitMessage]);
 
 	const {
 		register,
