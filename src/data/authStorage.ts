@@ -134,6 +134,39 @@ export function getCurrentAuthUser(): AuthUser | null {
 	);
 }
 
+export function updateAuthUserProfile(email: string, fullName: string): AuthUser {
+	const normalizedEmail = email.trim().toLowerCase();
+	const normalizedFullName = fullName.trim();
+	if (!normalizedFullName) {
+		throw new Error('Please enter your name.');
+	}
+
+	const users = getStoredUsers();
+	const userIndex = users.findIndex((user) => user.email === normalizedEmail);
+	if (userIndex === -1) {
+		throw new Error('This account could not be found. Please sign in again.');
+	}
+
+	const updatedUser: AuthUser = {
+		fullName: normalizedFullName,
+		email: users[userIndex].email,
+	};
+	users[userIndex] = { ...users[userIndex], fullName: normalizedFullName };
+	localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+
+	for (const storage of [localStorage, sessionStorage]) {
+		const session = getStoredSession(storage);
+		if (session?.user.email === normalizedEmail) {
+			storage.setItem(
+				SESSION_STORAGE_KEY,
+				JSON.stringify({ ...session, user: updatedUser }),
+			);
+		}
+	}
+
+	return updatedUser;
+}
+
 export function signOutUser(): void {
 	localStorage.removeItem(SESSION_STORAGE_KEY);
 	sessionStorage.removeItem(SESSION_STORAGE_KEY);

@@ -1,16 +1,14 @@
 import Navbar from '../layout/Navbar';
 import HeroBackground from '../assets/images/house9.jpg';
 import Button from '../components/ui/Button';
-import { ChevronDown, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import SectionHeading from '../components/ui/SectionHeading';
-import filterIcon from '../assets/icons/filter.svg';
 import PropertyCard from '../components/propertypage/PropertyCards';
 import Property from '../data/Property';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
 	propertiesPerPage,
-	propertyFilterSections,
 	propertyPriceRanges,
 	propertySortOptions,
 	propertyTypes,
@@ -136,84 +134,13 @@ export default function PropertyPage() {
 					</motion.form>
 				</div>
 			</motion.section>
-			<div className="flex flex-col items-stretch font-poppins lg:flex-row">
-				{/*side bar*/}
-				<motion.aside
-					initial={{ opacity: 0, x: -24 }}
-					whileInView={{ opacity: 1, x: 0 }}
-					viewport={{ once: true, amount: 0.08 }}
-					transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-					className="w-full shrink-0 border-b border-slate-200 bg-white px-4 py-5 sm:px-6 lg:w-64 lg:border-b-0 lg:border-r lg:px-5 lg:py-6"
-				>
-					<div className="flex items-center justify-between border-b border-slate-100 pb-4">
-						<div className="flex items-center gap-3">
-							<img
-								src={filterIcon}
-								alt=""
-								aria-hidden="true"
-								className="h-8 w-8 object-contain"
-							/>
-							<span className="text-sm font-semibold text-slate-800">
-								Filters
-							</span>
-						</div>
-
-						<button
-							type="button"
-							onClick={() => {
-								setSearchQuery('');
-								setAppliedSearchQuery('');
-								setCurrentPage(1);
-							}}
-							className="text-xs font-medium text-emerald-700 hover:text-emerald-900"
-						>
-							Clear All
-						</button>
-					</div>
-
-					<div>
-						{propertyFilterSections.map((section) => (
-							<div
-								key={section.title}
-								className="border-b border-slate-100 py-4 last:border-b-0"
-							>
-								<button
-									type="button"
-									className="flex w-full items-center justify-between text-left"
-								>
-									<span className="text-xs font-semibold text-slate-700">
-										{section.title}
-									</span>
-									<ChevronDown
-										className="h-3.5 w-3.5 text-slate-500"
-										aria-hidden="true"
-									/>
-								</button>
-								<div className="mt-3 space-y-2">
-									{section.options.map((option, index) => (
-										<label
-											key={option}
-											className="flex cursor-pointer items-center gap-2 text-xs text-slate-500"
-										>
-											<input
-												type="checkbox"
-												defaultChecked={index === 0}
-												className="h-3.5 w-3.5 rounded border-slate-300 accent-emerald-700"
-											/>
-											<span>{option}</span>
-										</label>
-									))}
-								</div>
-							</div>
-						))}
-					</div>
-				</motion.aside>
+			<div className="font-poppins">
 				<motion.main
 					initial={{ opacity: 0, y: 22 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true, amount: 0.04 }}
 					transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-					className="min-h-96 flex-1 bg-slate-50 p-6 lg:p-8"
+					className="min-h-96 w-full bg-slate-50 p-6 lg:p-8"
 				>
 					<motion.div
 						initial={{ opacity: 0, y: 12 }}

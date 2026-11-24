@@ -8,6 +8,7 @@ import AgentPage from './pages/AgentPage';
 import FavoritePage from './pages/FavoritePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import ProfilePage from './pages/ProfilePage';
 import type { ReactNode } from 'react';
 import { getCurrentAuthUser } from './data/authStorage';
 
@@ -28,6 +29,14 @@ function App() {
 				<Route path="/" element={<HomePage />} />
 				<Route path="signup" element={<SignUp />} />
 				<Route path="signin" element={<SignIn />} />
+				<Route
+					path="profile"
+					element={
+						<ProtectedRoute>
+							<ProfilePage />
+						</ProtectedRoute>
+					}
+				/>
 				<Route
 					path="properties"
 					element={

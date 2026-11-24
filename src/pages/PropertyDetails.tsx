@@ -11,19 +11,27 @@ import { useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Property from '../data/Property';
+import {
+	getFavoritePropertyIds,
+	toggleFavoriteProperty,
+} from '../data/favoriteStorage';
 import Navbar from '../layout/Navbar';
 
 export default function PropertyDetails() {
 	const { id } = useParams();
-	const [isFavorite, setIsFavorite] = useState(false);
+	const [favoritePropertyIds, setFavoritePropertyIds] = useState(
+		getFavoritePropertyIds,
+	);
 	const property = Property.find((item) => item.id === Number(id));
 
 	if (!property) {
 		return <Navigate to="/properties" replace />;
 	}
 
+	const isFavorite = favoritePropertyIds.includes(property.id);
 	const locationUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property.location)}`;
-	const toggleFavorite = () => setIsFavorite((favorite) => !favorite);
+	const toggleFavorite = () =>
+		setFavoritePropertyIds(toggleFavoriteProperty(property.id));
 
 	return (
 		<>

@@ -6,16 +6,17 @@ import PropertyCard from '../components/propertypage/PropertyCards';
 import Property from '../data/Property';
 import HeroBackground from '../assets/images/house9.jpg';
 import {
+	getFavoritePropertyIds,
+	removeFavoriteProperty,
+} from '../data/favoriteStorage';
+import {
 	favoriteSortOptions,
-	initialFavoritePropertyIds,
 	type FavoriteSortOption,
 } from '../data/favoritePageData';
 import Navbar from '../layout/Navbar';
 
 export default function FavoritePage() {
-	const [savedPropertyIds, setSavedPropertyIds] = useState([
-		...initialFavoritePropertyIds,
-	]);
+	const [savedPropertyIds, setSavedPropertyIds] = useState(getFavoritePropertyIds);
 	const [sortOption, setSortOption] =
 		useState<FavoriteSortOption>('newest');
 	const savedProperties = useMemo(() => {
@@ -43,9 +44,7 @@ export default function FavoritePage() {
 	}, [savedPropertyIds, sortOption]);
 
 	const removeFavorite = (propertyId: number) => {
-		setSavedPropertyIds((savedIds) =>
-			savedIds.filter((savedId) => savedId !== propertyId),
-		);
+		setSavedPropertyIds(removeFavoriteProperty(propertyId));
 	};
 
 	return (
