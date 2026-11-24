@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import HeaderImage from '../../assets/images/header-icon.png';
+import { registerUser } from '../../data/authStorage';
 
 import {
 	Home,
@@ -35,6 +37,18 @@ const benefits = [
 export default function SignUp() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const [submitMessage, setSubmitMessage] = useState<{
+		message: string;
+		isError: boolean;
+	} | null>(null);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!submitMessage || submitMessage.isError) return;
+
+		const timeoutId = window.setTimeout(() => navigate('/signin'), 1700);
+		return () => window.clearTimeout(timeoutId);
+	}, [navigate, submitMessage]);
 
 	const {
 		register,
@@ -45,13 +59,38 @@ export default function SignUp() {
 
 	const password = watch('password');
 
-	const onSubmit = (data: SignUpFormData) => {
-		console.log(data);
+	const onSubmit = async (data: SignUpFormData) => {
+		setSubmitMessage(null);
+		try {
+			await registerUser(data);
+			setSubmitMessage({
+				message: 'Account created. You can now sign in with your email and password.',
+				isError: false,
+			});
+		} catch (error) {
+			setSubmitMessage({
+				message:
+					error instanceof Error
+						? error.message
+						: 'Unable to create your account. Please try again.',
+				isError: true,
+			});
+		}
 	};
 
 	return (
-		<div className="min-h-screen bg-[#f8f8f6] lg:flex font-poppins">
-			<div className="relative hidden min-h-screen overflow-hidden bg-[#17211c] lg:flex lg:w-[52%] xl:w-[55%]">
+		<motion.div
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.55, ease: 'easeOut' }}
+			className="min-h-screen bg-[#f8f8f6] lg:flex font-poppins"
+		>
+			<motion.div
+				initial={{ opacity: 0, x: -28 }}
+				animate={{ opacity: 1, x: 0 }}
+				transition={{ duration: 0.7, ease: 'easeOut' }}
+				className="relative hidden min-h-screen overflow-hidden bg-[#17211c] lg:flex lg:w-[52%] xl:w-[55%]"
+			>
 				{/* Background image */}
 				<div
 					className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-[1.02]"
@@ -202,12 +241,17 @@ export default function SignUp() {
 				<div className="pointer-events-none absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
 
 				<div className="pointer-events-none absolute -right-32 top-1/3 h-80 w-80 rounded-full bg-emerald-300/10 blur-3xl" />
-			</div>
+			</motion.div>
 
 			{/* =========================================================
 			    RIGHT — SIGN UP FORM
 			========================================================= */}
-			<div className="flex min-h-screen flex-1 flex-col justify-center bg-[#fafaf8] px-6 py-10 sm:px-10 md:px-16 lg:px-12 xl:px-20">
+			<motion.div
+				initial={{ opacity: 0, x: 28 }}
+				animate={{ opacity: 1, x: 0 }}
+				transition={{ duration: 0.7, delay: 0.12, ease: 'easeOut' }}
+				className="flex min-h-screen flex-1 flex-col justify-center bg-[#fafaf8] px-6 py-10 sm:px-10 md:px-16 lg:px-12 xl:px-20"
+			>
 				{/* Top sign-in link */}
 				<div className="mb-10 flex justify-end">
 					<p className="text-sm text-neutral-500">
@@ -455,6 +499,14 @@ export default function SignUp() {
 								className="transition-transform duration-200 group-hover:translate-x-0.5"
 							/>
 						</button>
+						{submitMessage && (
+							<p
+								className={`text-sm ${submitMessage.isError ? 'text-red-600' : 'text-emerald-700'}`}
+								role={submitMessage.isError ? 'alert' : 'status'}
+							>
+								{submitMessage.message}
+							</p>
+						)}
 
 						{/* Divider */}
 						<div className="flex items-center gap-4 py-1">
@@ -499,7 +551,51 @@ export default function SignUp() {
 						</p>
 					</form>
 				</div>
-			</div>
-		</div>
+			</motion.div>
+			<AnimatePresence>
+				{submitMessage && !submitMessage.isError && (
+					<motion.div
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						className="fixed inset-0 z-50 flex items-center justify-center bg-[#07100b]/60 px-6 backdrop-blur-md"
+						role="status"
+						aria-live="polite"
+					>
+						<motion.div
+							initial={{ opacity: 0, scale: 0.82, y: 24 }}
+							animate={{ opacity: 1, scale: 1, y: 0 }}
+							exit={{ opacity: 0, scale: 0.92, y: 12 }}
+							transition={{ type: 'spring', stiffness: 220, damping: 19 }}
+							className="w-full max-w-sm rounded-3xl border border-white/70 bg-white p-8 text-center shadow-2xl shadow-black/20"
+						>
+							<motion.div
+								initial={{ scale: 0, rotate: -35 }}
+								animate={{ scale: 1, rotate: 0 }}
+								transition={{ type: 'spring', stiffness: 260, damping: 14, delay: 0.15 }}
+								className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-700"
+							>
+								<CheckCircle2 size={34} strokeWidth={1.8} />
+							</motion.div>
+							<h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+								You’re all set!
+							</h2>
+							<p className="mt-2 text-sm leading-6 text-neutral-500">
+								Your EstateFlow account is ready. Taking you to sign in…
+							</p>
+							<div className="mt-7 h-1.5 overflow-hidden rounded-full bg-emerald-100">
+								<motion.div
+									initial={{ scaleX: 0 }}
+									animate={{ scaleX: 1 }}
+									transition={{ duration: 1.55, ease: 'linear' }}
+									style={{ transformOrigin: 'left' }}
+									className="h-full rounded-full bg-emerald-700"
+								/>
+							</div>
+						</motion.div>
+					</motion.div>
+				)}
+			</AnimatePresence>
+		</motion.div>
 	);
 }

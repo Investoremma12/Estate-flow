@@ -26,6 +26,7 @@ const NavLinks = [
 	{
 		links: 'Home',
 		icons: House,
+		path: '/',
 	},
 	{
 		links: 'Properties',
@@ -78,6 +79,11 @@ export default function Navbar() {
 		if (path) navigate(path);
 	};
 
+	const goToFavorites = () => {
+		setIsMenuOpen(false);
+		navigate('/favorites');
+	};
+
 	useEffect(() => {
 		if (!isMenuOpen) return;
 
@@ -93,10 +99,13 @@ export default function Navbar() {
 		<nav className="relative z-20 mx-auto bg-white px-4 py-4 sm:px-6 lg:px-8">
 			{/* Desktop Menu */}
 			<div className="mx-auto flex max-w-7xl items-center justify-between font-poppins">
-				<div className="flex items-center cursor-pointer">
+				<button
+					className="flex items-center cursor-pointer"
+					onClick={() => navigate('/')}
+				>
 					<img src={HeaderImage} className="h-8 w-10" />
 					<div className="font-bold text-lg text-black/80 ">EstateFlow</div>
-				</div>
+				</button>
 				<div className="hidden lg:flex items-center gap-8">
 					{NavLinks.map((Navlink) => (
 						<button
@@ -110,7 +119,9 @@ export default function Navbar() {
 					))}
 				</div>
 				<div className="hidden lg:flex items-center gap-4">
-					<Heart className="w-6 h-6 text-gray-700" />
+					<button onClick={goToFavorites}>
+						<Heart className="w-6 h-6 text-gray-700" />
+					</button>
 
 					<div className="flex items-center gap-2">
 						<Button
