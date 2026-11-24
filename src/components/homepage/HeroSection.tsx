@@ -1,6 +1,6 @@
 import HeroBackground from '../../assets/images/house9.jpg';
 import Button from '../ui/Button';
-import { Search } from 'lucide-react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function HeroSection() {
@@ -28,48 +28,27 @@ export default function HeroSection() {
 					</p>
 				</div>
 
-				<form
-					onSubmit={(event) => {
-						event.preventDefault();
-						navigate('/properties');
-					}}
-					className="mt-10 grid max-w-5xl gap-2 rounded-xl bg-white/95 p-2 shadow-2xl backdrop-blur-sm md:grid-cols-[minmax(0,1.7fr)_minmax(9rem,0.8fr)_minmax(9rem,0.8fr)_auto] md:gap-2"
-				>
-					<label className="flex min-h-12 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-slate-400">
-						<Search className="h-4 w-4 shrink-0" aria-hidden="true" />
-						<input
-							type="search"
-							placeholder="Search by location, property type or keyword..."
-							aria-label="Search by location, property type or keyword"
-							className="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
-						/>
-					</label>
-					<select
-						aria-label="Property type"
-						defaultValue=""
-						className="min-h-12 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-600"
+				<div className="mt-9 flex flex-col gap-5 sm:flex-row sm:items-center">
+					<Button
+						type="button"
+						onClick={() => navigate('/properties')}
+						className="group w-fit gap-2 rounded-lg px-5 py-3 text-white shadow-lg shadow-emerald-950/20"
 					>
-						<option value="" disabled>
-							Property Type
-						</option>
-						<option>House</option>
-						<option>Apartment</option>
-						<option>Villa</option>
-					</select>
-					<select
-						aria-label="Price range"
-						defaultValue=""
-						className="min-h-12 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-600"
-					>
-						<option value="" disabled>
-							Price Range
-						</option>
-						<option>Under $300k</option>
-						<option>$300k - $600k</option>
-						<option>Over $600k</option>
-					</select>
-					<Button type="submit" label="Search" className=" text-white" />
-				</form>
+						Explore properties
+						<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+					</Button>
+					<div className="flex items-center gap-3 text-white/85">
+						<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-sm">
+							<ShieldCheck className="h-5 w-5 text-emerald-200" />
+						</div>
+						<div>
+							<p className="text-sm font-semibold">Find your next home with confidence</p>
+							<p className="mt-0.5 text-xs text-white/65">
+								Curated properties. Trusted local experts.
+							</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
 	);

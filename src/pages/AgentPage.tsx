@@ -10,6 +10,7 @@ import {
 	X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Button from '../components/ui/Button';
 import AgentCard from '../components/agentpage/AgentCard';
 import SectionHeading from '../components/ui/SectionHeading';
@@ -41,13 +42,21 @@ function AgentProfileDialog({ agent, onClose }: AgentProfileDialogProps) {
 	}, [onClose]);
 
 	return (
-		<div
+		<motion.div
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
+			transition={{ duration: 0.2 }}
 			className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4"
 			onClick={(event) => {
 				if (event.target === event.currentTarget) onClose();
 			}}
 		>
-			<section
+			<motion.section
+				initial={{ opacity: 0, y: 20, scale: 0.97 }}
+				animate={{ opacity: 1, y: 0, scale: 1 }}
+				exit={{ opacity: 0, y: 12, scale: 0.98 }}
+				transition={{ type: 'spring', stiffness: 280, damping: 26 }}
 				role="dialog"
 				aria-modal="true"
 				aria-labelledby="agent-profile-title"
@@ -144,8 +153,8 @@ function AgentProfileDialog({ agent, onClose }: AgentProfileDialogProps) {
 						</p>
 					</div>
 				</div>
-			</section>
-		</div>
+			</motion.section>
+		</motion.div>
 	);
 }
 
@@ -207,15 +216,29 @@ export default function AgentPage() {
 
 	return (
 		<>
-			<Navbar />
-			<section
+			<motion.div
+				initial={{ opacity: 0, y: -16 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+			>
+				<Navbar />
+			</motion.div>
+			<motion.section
+				initial={{ opacity: 0, y: 22 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
 				className="relative isolate overflow-hidden bg-cover bg-center"
 				style={{ backgroundImage: `url(${HeroBackground})` }}
 			>
 				<div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/80 via-slate-950/55 to-slate-950/10" />
 
 				<div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8">
-					<div className="max-w-2xl">
+					<motion.div
+						initial={{ opacity: 0, x: -18 }}
+						animate={{ opacity: 1, x: 0 }}
+						transition={{ duration: 0.65, delay: 0.16 }}
+						className="max-w-2xl"
+					>
 						<SectionHeading
 							title="Our professionals"
 							className="mb-1 text-[10px] tracking-[0.18em]"
@@ -227,9 +250,12 @@ export default function AgentPage() {
 							Work with trusted real estate professionals who can help you find
 							the right property.
 						</p>
-					</div>
+					</motion.div>
 
-					<form
+					<motion.form
+						initial={{ opacity: 0, y: 16 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.6, delay: 0.3 }}
 						onSubmit={(event) => event.preventDefault()}
 						className="mt-5 flex max-w-5xl flex-col gap-2 rounded-xl bg-white p-2 shadow-lg sm:flex-row"
 					>
@@ -251,14 +277,29 @@ export default function AgentPage() {
 							<Search className="h-4 w-4" aria-hidden="true" />
 							Search
 						</Button>
-					</form>
+					</motion.form>
 				</div>
-			</section>
+			</motion.section>
 
-			<main className="min-h-screen bg-[#f8faf9] px-4 py-5 font-poppins sm:px-6 lg:px-8">
+			<motion.main
+				initial={{ opacity: 0, y: 18 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.75, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+				className="min-h-screen bg-[#f8faf9] px-4 py-5 font-poppins sm:px-6 lg:px-8"
+			>
 				<div className="mx-auto grid max-w-7xl items-start gap-6 lg:grid-cols-[minmax(0,1fr)_238px]">
-					<section>
-						<div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+					<motion.section
+						initial={{ opacity: 0, y: 18 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.06 }}
+						transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+					>
+						<motion.div
+							initial={{ opacity: 0, y: 12 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.45, delay: 0.2 }}
+							className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-center"
+						>
 							<h2 className="text-xl font-bold text-slate-900">
 								Our Agents ({filteredAgents.length})
 							</h2>
@@ -279,31 +320,59 @@ export default function AgentPage() {
 									))}
 								</select>
 							</label>
-						</div>
+						</motion.div>
 
 						{visibleAgents.length > 0 ? (
-							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+							<motion.div
+								initial="hidden"
+								animate="visible"
+								variants={{
+									hidden: {},
+									visible: { transition: { staggerChildren: 0.08 } },
+								}}
+								className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+							>
 								{visibleAgents.map((agent) => (
-									<AgentCard
+									<motion.div
 										key={agent.id}
-										agent={agent}
-										isFeatured={agent.id === featuredAgentId}
-										onViewProfile={setActiveAgentId}
-									/>
+										variants={{
+											hidden: { opacity: 0, y: 18, scale: 0.98 },
+											visible: {
+												opacity: 1,
+												y: 0,
+												scale: 1,
+												transition: { duration: 0.5, ease: 'easeOut' },
+											},
+										}}
+									>
+										<AgentCard
+											agent={agent}
+											isFeatured={agent.id === featuredAgentId}
+											onViewProfile={setActiveAgentId}
+										/>
+									</motion.div>
 								))}
-							</div>
+							</motion.div>
 						) : (
-							<div className="rounded-xl border border-slate-200 bg-white px-5 py-12 text-center">
+							<motion.div
+								initial={{ opacity: 0, y: 12 }}
+								animate={{ opacity: 1, y: 0 }}
+								className="rounded-xl border border-slate-200 bg-white px-5 py-12 text-center"
+							>
 								<p className="font-semibold text-slate-800">No agents found</p>
 								<p className="mt-1 text-sm text-slate-500">
 									Try a different name, location, or specialty.
 								</p>
-							</div>
+							</motion.div>
 						)}
 
 						{totalPages > 1 && (
-							<nav
+							<motion.nav
 								aria-label="Agent pages"
+								initial={{ opacity: 0, y: 10 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true }}
+								transition={{ duration: 0.45 }}
 								className="mt-6 flex items-center justify-center gap-2 border-t border-slate-200 pt-5"
 							>
 								<button
@@ -343,12 +412,22 @@ export default function AgentPage() {
 								>
 									<ChevronRight className="h-4 w-4" aria-hidden="true" />
 								</button>
-							</nav>
+							</motion.nav>
 						)}
-					</section>
+					</motion.section>
 
-					<aside className="flex flex-col gap-4">
-						<section className="rounded-xl bg-gradient-to-br from-[#087A5B] to-[#07513F] p-5 text-white shadow-sm">
+					<motion.aside
+						initial={{ opacity: 0, x: 20 }}
+						whileInView={{ opacity: 1, x: 0 }}
+						viewport={{ once: true, amount: 0.06 }}
+						transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+						className="flex flex-col gap-4"
+					>
+						<motion.section
+							whileHover={{ y: -3 }}
+							transition={{ duration: 0.3 }}
+							className="rounded-xl bg-gradient-to-br from-[#087A5B] to-[#07513F] p-5 text-white shadow-sm"
+						>
 							<Users className="h-9 w-9" strokeWidth={1.5} aria-hidden="true" />
 							<h2 className="mt-4 text-lg font-bold">Find the right agent</h2>
 							<p className="mt-2 text-sm leading-5 text-white/90">
@@ -365,9 +444,13 @@ export default function AgentPage() {
 									{averageRating} avg.
 								</span>
 							</div>
-						</section>
+						</motion.section>
 
-						<section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+						<motion.section
+							whileHover={{ y: -3 }}
+							transition={{ duration: 0.3 }}
+							className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+						>
 							<h2 className="text-base font-bold text-slate-900">
 								Why Work With Us?
 							</h2>
@@ -393,17 +476,20 @@ export default function AgentPage() {
 									{totalSales.toLocaleString()} properties
 								</p>
 							</div>
-						</section>
-					</aside>
+						</motion.section>
+					</motion.aside>
 				</div>
-			</main>
+			</motion.main>
 
-			{activeAgent && (
-				<AgentProfileDialog
-					agent={activeAgent}
-					onClose={() => setActiveAgentId(null)}
-				/>
-			)}
+			<AnimatePresence>
+				{activeAgent && (
+					<AgentProfileDialog
+						key={activeAgent.id}
+						agent={activeAgent}
+						onClose={() => setActiveAgentId(null)}
+					/>
+				)}
+			</AnimatePresence>
 		</>
 	);
 }

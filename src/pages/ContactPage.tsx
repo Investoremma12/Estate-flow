@@ -13,6 +13,7 @@ import {
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import Button from '../components/ui/Button';
 import HeroBackground from '../assets/images/house9.jpg';
 import {
@@ -70,15 +71,34 @@ function ContactPage() {
 
 	return (
 		<>
-			<Navbar />
-			<main className="font-poppins">
-				<section
+			<motion.div
+				initial={{ opacity: 0, y: -16 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+			>
+				<Navbar />
+			</motion.div>
+			<motion.main
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ duration: 0.8, ease: 'easeOut' }}
+				className="font-poppins"
+			>
+				<motion.section
+					initial={{ opacity: 0, y: 22 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
 					className="relative isolate overflow-hidden bg-cover bg-center"
 					style={{ backgroundImage: `url(${HeroBackground})` }}
 				>
 					<div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/80 via-slate-950/55 to-slate-950/10" />
 					<div className="mx-auto flex min-h-32 max-w-7xl items-center px-4 py-5 sm:min-h-36 sm:px-6 lg:px-8">
-						<div className="max-w-lg">
+						<motion.div
+							initial={{ opacity: 0, x: -18 }}
+							animate={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.65, delay: 0.18 }}
+							className="max-w-lg"
+						>
 							<p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#087A5B]">
 								Get in touch
 							</p>
@@ -89,12 +109,18 @@ function ContactPage() {
 								Have a question, need assistance, or want to learn more about
 								our properties? We’re here to help!
 							</p>
-						</div>
+						</motion.div>
 					</div>
-				</section>
+				</motion.section>
 
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<section className="grid gap-4 py-4 lg:grid-cols-[minmax(0,1.9fr)_minmax(270px,1fr)]">
+					<motion.section
+						initial={{ opacity: 0, y: 24 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.08 }}
+						transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+						className="grid gap-4 py-4 lg:grid-cols-[minmax(0,1.9fr)_minmax(270px,1fr)]"
+					>
 						<div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
 							<h2 className="text-lg font-bold text-slate-900">
 								Send Us a Message
@@ -345,19 +371,31 @@ function ContactPage() {
 								<ChevronRight className="h-4 w-4" aria-hidden="true" />
 							</a>
 						</aside>
-					</section>
+					</motion.section>
 
-					<section
+					<motion.section
 						aria-label="Quick contact options"
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true, amount: 0.15 }}
+						variants={{
+							hidden: {},
+							visible: { transition: { staggerChildren: 0.1 } },
+						}}
 						className="grid gap-2 pb-5 sm:grid-cols-3"
 					>
 						{contactQuickLinks.map(
 							({ title, description, value, icon: Icon, href, external }) => (
-								<a
+								<motion.a
 									key={title}
 									href={href}
 									target={external ? '_blank' : undefined}
 									rel={external ? 'noreferrer' : undefined}
+									variants={{
+										hidden: { opacity: 0, y: 16 },
+										visible: { opacity: 1, y: 0 },
+									}}
+									transition={{ duration: 0.5, ease: 'easeOut' }}
 									className="flex items-center gap-3 rounded-xl bg-[#eaf7f2] p-3 transition-colors hover:bg-[#ddf1e9]"
 								>
 									<span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#d2eee2] text-[#07513F]">
@@ -378,12 +416,18 @@ function ContactPage() {
 											{value}
 										</span>
 									</span>
-								</a>
+								</motion.a>
 							),
 						)}
-					</section>
+					</motion.section>
 
-					<section className="grid gap-4 border-t border-slate-200 py-5 sm:grid-cols-[minmax(190px,0.65fr)_minmax(0,1.5fr)] sm:gap-6">
+					<motion.section
+						initial={{ opacity: 0, y: 22 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.15 }}
+						transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+						className="grid gap-4 border-t border-slate-200 py-5 sm:grid-cols-[minmax(190px,0.65fr)_minmax(0,1.5fr)] sm:gap-6"
+					>
 						<div>
 							<h2 className="text-xl font-bold leading-tight text-slate-900">
 								Frequently Asked Questions
@@ -419,21 +463,34 @@ function ContactPage() {
 												aria-hidden="true"
 											/>
 										</button>
-										{isOpen && (
-											<p
-												id={panelId}
-												className="px-3 pb-3 text-xs leading-5 text-slate-600"
-											>
-												{answer}
-											</p>
-										)}
+										<AnimatePresence initial={false}>
+											{isOpen && (
+												<motion.p
+													id={panelId}
+													initial={{ opacity: 0, height: 0 }}
+													animate={{ opacity: 1, height: 'auto' }}
+													exit={{ opacity: 0, height: 0 }}
+													transition={{ duration: 0.25, ease: 'easeOut' }}
+													className="overflow-hidden px-3 pb-3 text-xs leading-5 text-slate-600"
+												>
+													{answer}
+												</motion.p>
+											)}
+										</AnimatePresence>
 									</div>
 								);
 							})}
 						</div>
-					</section>
+					</motion.section>
 
-					<section className="mb-5 flex flex-col gap-4 rounded-xl bg-gradient-to-r from-[#07513F] to-[#087A5B] px-5 py-5 text-white sm:flex-row sm:items-center sm:justify-between sm:px-8">
+					<motion.section
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.15 }}
+						whileHover={{ y: -2 }}
+						transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+						className="mb-5 flex flex-col gap-4 rounded-xl bg-gradient-to-r from-[#07513F] to-[#087A5B] px-5 py-5 text-white sm:flex-row sm:items-center sm:justify-between sm:px-8"
+					>
 						<div className="flex items-center gap-3">
 							<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10">
 								<House className="h-8 w-8" aria-hidden="true" />
@@ -454,10 +511,17 @@ function ContactPage() {
 							Browse Properties
 							<ArrowRight className="h-4 w-4" aria-hidden="true" />
 						</Link>
-					</section>
+					</motion.section>
 				</div>
-			</main>
-			<Footer />
+			</motion.main>
+			<motion.div
+				initial={{ opacity: 0, y: 18 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, amount: 0.08 }}
+				transition={{ duration: 0.7 }}
+			>
+				<Footer />
+			</motion.div>
 		</>
 	);
 }

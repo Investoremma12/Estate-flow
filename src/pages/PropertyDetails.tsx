@@ -6,9 +6,10 @@ import {
 	Home,
 	MapPin,
 	Maximize2,
-} from 'lucide-react';  
+} from 'lucide-react';
 import { useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Property from '../data/Property';
 import Navbar from '../layout/Navbar';
 
@@ -26,11 +27,25 @@ export default function PropertyDetails() {
 
 	return (
 		<>
-			<Navbar />
-			<main className="min-h-screen bg-[#f7f9f8] px-4 pb-14 pt-5 sm:px-6 lg:px-8">
+			<motion.div
+				initial={{ opacity: 0, y: -12 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+			>
+				<Navbar />
+			</motion.div>
+			<motion.main
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ duration: 0.9, ease: 'easeOut' }}
+				className="min-h-screen bg-[#f7f9f8] px-4 pb-14 pt-5 sm:px-6 lg:px-8"
+			>
 				<div className="mx-auto max-w-[1296px]">
-					<nav
+					<motion.nav
 						aria-label="Breadcrumb"
+						initial={{ opacity: 0, x: -14 }}
+						animate={{ opacity: 1, x: 0 }}
+						transition={{ duration: 0.65, delay: 0.12, ease: 'easeOut' }}
 						className="mb-4 flex items-center gap-2 text-xs text-slate-500 sm:text-sm"
 					>
 						<Link to="/" aria-label="Home" className="hover:text-emerald-700">
@@ -44,22 +59,58 @@ export default function PropertyDetails() {
 						<span aria-current="page" className="truncate text-slate-700">
 							{property.title}
 						</span>
-					</nav>
+					</motion.nav>
 
-					<div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.8fr)_minmax(19rem,0.95fr)]">
-						<div className="min-w-0">
-							<div className="relative aspect-[1.65/1] overflow-hidden rounded-xl bg-slate-200 shadow-sm">
-								<img
+					<motion.div
+						initial="hidden"
+						animate="visible"
+						variants={{
+							hidden: {},
+							visible: {
+								transition: {
+									staggerChildren: 0.16,
+									delayChildren: 0.18,
+								},
+							},
+						}}
+						className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.8fr)_minmax(19rem,0.95fr)]"
+					>
+						<motion.div
+							variants={{
+								hidden: { opacity: 0, y: 22 },
+								visible: {
+									opacity: 1,
+									y: 0,
+									transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+								},
+							}}
+							className="min-w-0"
+						>
+							<motion.div
+								whileHover={{ y: -3 }}
+								transition={{ duration: 0.35, ease: 'easeOut' }}
+								className="relative aspect-[1.65/1] overflow-hidden rounded-xl bg-slate-200 shadow-sm"
+							>
+								<motion.img
 									src={property.image}
 									alt={property.title}
 									className="h-full w-full object-cover"
+									whileHover={{ scale: 1.035 }}
+									transition={{ duration: 0.7, ease: 'easeOut' }}
 								/>
-								<span className="absolute left-3 top-3 rounded-full bg-emerald-700 px-3 py-1 text-xs font-semibold text-white sm:left-4 sm:top-4 sm:px-4 sm:py-1.5 sm:text-sm">
+								<motion.span
+									initial={{ opacity: 0, scale: 0.85 }}
+									animate={{ opacity: 1, scale: 1 }}
+									transition={{ duration: 0.45, delay: 0.55 }}
+									className="absolute left-3 top-3 rounded-full bg-emerald-700 px-3 py-1 text-xs font-semibold text-white sm:left-4 sm:top-4 sm:px-4 sm:py-1.5 sm:text-sm"
+								>
 									{property.propertyStatus}
-								</span>
-								<button
+								</motion.span>
+								<motion.button
 									type="button"
 									onClick={toggleFavorite}
+									whileHover={{ scale: 1.08 }}
+									whileTap={{ scale: 0.9 }}
 									aria-label={
 										isFavorite
 											? 'Remove from favorites'
@@ -68,14 +119,25 @@ export default function PropertyDetails() {
 									aria-pressed={isFavorite}
 									className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-slate-700 shadow-md transition-colors hover:text-emerald-700 sm:right-4 sm:top-4 sm:h-10 sm:w-10"
 								>
-									<Heart
-										className={`h-5 w-5 ${isFavorite ? 'fill-emerald-700 text-emerald-700' : ''}`}
-										aria-hidden="true"
-									/>
-								</button>
-							</div>
+									<motion.div
+										animate={{ scale: isFavorite ? 1.12 : 1 }}
+										transition={{ type: 'spring', stiffness: 350, damping: 16 }}
+									>
+										<Heart
+											className={`h-5 w-5 ${isFavorite ? 'fill-emerald-700 text-emerald-700' : ''}`}
+											aria-hidden="true"
+										/>
+									</motion.div>
+								</motion.button>
+							</motion.div>
 
-							<section className="mt-6 rounded-xl bg-white p-5 shadow-sm sm:p-6">
+							<motion.section
+								initial={{ opacity: 0, y: 22 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, amount: 0.2 }}
+								transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+								className="mt-6 rounded-xl bg-white p-5 shadow-sm sm:p-6"
+							>
 								<h2 className="text-lg font-semibold text-slate-900">
 									Property details
 								</h2>
@@ -103,11 +165,25 @@ export default function PropertyDetails() {
 										</dd>
 									</div>
 								</dl>
-							</section>
-						</div>
+							</motion.section>
+						</motion.div>
 
-						<aside className="flex min-w-0 flex-col gap-4">
-							<section className="rounded-xl bg-white p-5 shadow-sm sm:p-6">
+						<motion.aside
+							variants={{
+								hidden: { opacity: 0, x: 22 },
+								visible: {
+									opacity: 1,
+									x: 0,
+									transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+								},
+							}}
+							className="flex min-w-0 flex-col gap-4"
+						>
+							<motion.section
+								whileHover={{ y: -3 }}
+								transition={{ duration: 0.3, ease: 'easeOut' }}
+								className="rounded-xl bg-white p-5 shadow-sm sm:p-6"
+							>
 								<p className="text-3xl font-bold leading-tight text-slate-900">
 									${property.price}
 									{property.propertyStatus === 'For Rent' && (
@@ -146,21 +222,38 @@ export default function PropertyDetails() {
 									</li>
 								</ul>
 
-								<button
+								<motion.button
 									type="button"
 									onClick={toggleFavorite}
+									whileHover={{ scale: 1.015 }}
+									whileTap={{ scale: 0.985 }}
 									aria-pressed={isFavorite}
 									className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-emerald-700 text-sm font-medium text-emerald-800 transition-colors hover:bg-emerald-50"
 								>
-									<Heart
-										className={`h-4 w-4 ${isFavorite ? 'fill-emerald-700' : ''}`}
-										aria-hidden="true"
-									/>
+									<motion.div
+										animate={{ scale: isFavorite ? 1.12 : 1 }}
+										transition={{ type: 'spring', stiffness: 350, damping: 16 }}
+									>
+										<Heart
+											className={`h-4 w-4 ${isFavorite ? 'fill-emerald-700' : ''}`}
+											aria-hidden="true"
+										/>
+									</motion.div>
 									{isFavorite ? 'Saved to Favorites' : 'Add to Favorites'}
-								</button>
-							</section>
+								</motion.button>
+							</motion.section>
 
-							<section className="rounded-xl bg-white p-5 shadow-sm sm:p-6">
+							<motion.section
+								initial={{ opacity: 0, y: 20 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, amount: 0.2 }}
+								transition={{
+									duration: 0.7,
+									delay: 0.12,
+									ease: [0.22, 1, 0.36, 1],
+								}}
+								className="rounded-xl bg-white p-5 shadow-sm sm:p-6"
+							>
 								<h2 className="text-lg font-semibold text-slate-900">
 									Property location
 								</h2>
@@ -185,11 +278,11 @@ export default function PropertyDetails() {
 										</span>
 									</span>
 								</a>
-							</section>
-						</aside>
-					</div>
+							</motion.section>
+						</motion.aside>
+					</motion.div>
 				</div>
-			</main>
+			</motion.main>
 		</>
 	);
 }
