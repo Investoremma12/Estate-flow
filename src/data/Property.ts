@@ -73,7 +73,7 @@ const Property = [
   },
   {
     id: 7,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Sale',
     price: '525,000',
     title: 'Spacious Suburban Home',
@@ -193,7 +193,7 @@ const Property = [
   },
   {
     id: 17,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Sale',
     price: '295,000',
     title: 'Renovated Downtown Condo',
@@ -313,7 +313,7 @@ const Property = [
   },
   {
     id: 27,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Rent',
     price: '5,200',
     title: 'Luxury Sky Apartment',
@@ -433,7 +433,7 @@ const Property = [
   },
   {
     id: 37,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Sale',
     price: '550,000',
     title: 'Updated Spacious Suburban Home',
@@ -553,7 +553,7 @@ const Property = [
   },
   {
     id: 47,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Sale',
     price: '330,000',
     title: 'Updated Renovated Downtown Condo',
@@ -673,7 +673,7 @@ const Property = [
   },
   {
     id: 57,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Rent',
     price: '5,475',
     title: 'Updated Luxury Sky Apartment',
@@ -793,7 +793,7 @@ const Property = [
   },
   {
     id: 67,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Sale',
     price: '585,000',
     title: 'Newly Renovated Spacious Suburban Home',
@@ -913,7 +913,7 @@ const Property = [
   },
   {
     id: 77,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Sale',
     price: '345,000',
     title: 'Newly Renovated Renovated Downtown Condo',
@@ -1033,7 +1033,7 @@ const Property = [
   },
   {
     id: 87,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Rent',
     price: '5,650',
     title: 'Newly Renovated Luxury Sky Apartment',
@@ -1153,7 +1153,7 @@ const Property = [
   },
   {
     id: 97,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Sale',
     price: '600,000',
     title: 'Premium Spacious Suburban Home',
@@ -1273,7 +1273,7 @@ const Property = [
   },
   {
     id: 107,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Sale',
     price: '380,000',
     title: 'Premium Renovated Downtown Condo',
@@ -1393,7 +1393,7 @@ const Property = [
   },
   {
     id: 117,
-    image: 'https://images.unsplash.com/photo-1600573472550-8090b5e3c5f4?auto=format&fit=crop&w=900&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85',
     propertyStatus: 'For Rent',
     price: '5,825',
     title: 'Premium Luxury Sky Apartment',

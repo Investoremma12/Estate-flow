@@ -1,6 +1,7 @@
 import {
 	Bath,
 	BedDouble,
+	CalendarDays,
 	ChevronRight,
 	Heart,
 	Home,
@@ -249,6 +250,17 @@ export default function PropertyDetails() {
 									</motion.div>
 									{isFavorite ? 'Saved to Favorites' : 'Add to Favorites'}
 								</motion.button>
+								<Link
+									to={`/contact?propertyId=${property.id}`}
+									aria-label={`Request a viewing for ${property.title}`}
+									className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#087A5B] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#066A4F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#087A5B]"
+								>
+									<CalendarDays className="h-4 w-4" aria-hidden="true" />
+									Request a Viewing
+								</Link>
+								<p className="mt-2 text-center text-xs leading-5 text-slate-500">
+									Choose a preferred date and send your request by email.
+								</p>
 							</motion.section>
 
 							<motion.section

@@ -1,26 +1,19 @@
 import {
 	ArrowUp,
-	BriefcaseBusiness,
-	Camera,
-	Globe2,
 	Home,
-	MessageCircle,
-	Play,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const quickLinks = ['Home', 'Properties', 'Agents', 'About', 'Contact'];
-const supportLinks = [
-	'Help Center',
-	'Privacy Policy',
-	'Terms of Service',
-	'FAQs',
+const quickLinks = [
+	{ label: 'Home', to: '/' },
+	{ label: 'Properties', to: '/properties' },
+	{ label: 'Agents', to: '/agent' },
+	{ label: 'About', to: '/about' },
+	{ label: 'Contact', to: '/contact' },
 ];
-const socialLinks = [
-	{ label: 'Facebook', icon: Globe2 },
-	{ label: 'Instagram', icon: Camera },
-	{ label: 'Twitter', icon: MessageCircle },
-	{ label: 'LinkedIn', icon: BriefcaseBusiness },
-	{ label: 'YouTube', icon: Play },
+const supportLinks = [
+	{ label: 'Help Center', to: '/contact' },
+	{ label: 'FAQs', to: '/contact' },
 ];
 
 export default function Footer() {
@@ -49,14 +42,14 @@ export default function Footer() {
 						Quick Links
 					</p>
 					<ul className="space-y-2.5">
-						{quickLinks.map((link) => (
-							<li key={link}>
-								<a
-									href="#"
+						{quickLinks.map(({ label, to }) => (
+							<li key={label}>
+								<Link
+									to={to}
 									className="text-sm text-emerald-50/70 transition-colors hover:text-white"
 								>
-									{link}
-								</a>
+									{label}
+								</Link>
 							</li>
 						))}
 					</ul>
@@ -67,14 +60,14 @@ export default function Footer() {
 						Support
 					</p>
 					<ul className="space-y-2.5">
-						{supportLinks.map((link) => (
-							<li key={link}>
-								<a
-									href="#"
+						{supportLinks.map(({ label, to }) => (
+							<li key={label}>
+								<Link
+									to={to}
 									className="text-sm text-emerald-50/70 transition-colors hover:text-white"
 								>
-									{link}
-								</a>
+									{label}
+								</Link>
 							</li>
 						))}
 					</ul>
@@ -84,18 +77,9 @@ export default function Footer() {
 					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-emerald-300">
 						Follow Us
 					</p>
-					<div className="flex gap-2.5">
-						{socialLinks.map(({ label, icon: Icon }) => (
-							<a
-								key={label}
-								href="#"
-								aria-label={`Visit our ${label} page`}
-								className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white transition-colors hover:border-emerald-300/40 hover:bg-emerald-500 hover:text-[#0F2E22]"
-							>
-								<Icon className="h-4 w-4" />
-							</a>
-						))}
-					</div>
+					<p className="text-sm text-emerald-50/70">
+						Social profiles coming soon.
+					</p>
 				</div>
 			</div>
 

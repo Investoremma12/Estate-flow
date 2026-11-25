@@ -11,11 +11,13 @@ import {
 	UserRound,
 } from 'lucide-react';
 import { useState } from 'react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useForm, useWatch, type SubmitHandler } from 'react-hook-form';
+import { Link, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Button from '../components/ui/Button';
 import HeroBackground from '../assets/images/house9.jpg';
+import Property from '../data/Property';
+import { getCurrentAuthUser } from '../data/authStorage';
 import {
 	contactDetails,
 	contactEmail,
@@ -32,34 +34,58 @@ interface ContactFormValues {
 	email: string;
 	phone: string;
 	inquiryType: string;
+	preferredDate: string;
 	message: string;
 }
 
 function ContactPage() {
 	const [openFaq, setOpenFaq] = useState<number | null>(null);
 	const [preparedEmail, setPreparedEmail] = useState<string | null>(null);
+	const [searchParams] = useSearchParams();
+	const propertyId = Number(searchParams.get('propertyId'));
+	const property =
+		Number.isInteger(propertyId) && propertyId > 0
+			? Property.find((item) => item.id === propertyId)
+			: undefined;
+	const currentUser = getCurrentAuthUser();
 
 	const {
+		control,
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<ContactFormValues>({
 		defaultValues: {
-			name: '',
-			email: '',
+			name: currentUser?.fullName ?? '',
+			email: currentUser?.email ?? '',
 			phone: '',
-			inquiryType: '',
-			message: '',
+			inquiryType: property ? 'Request a viewing' : '',
+			preferredDate: '',
+			message: property
+				? `I'm interested in viewing ${property.title}. Please contact me to arrange a suitable time.`
+				: '',
 		},
 	});
+	const selectedInquiryType = useWatch({ control, name: 'inquiryType' });
 
 	const onSubmit: SubmitHandler<ContactFormValues> = (values) => {
-		const subject = `EstateFlow inquiry: ${values.inquiryType}`;
+		const subject = `EstateFlow inquiry: ${values.inquiryType}${property ? ` - ${property.title}` : ''}`;
 		const body = [
 			`Name: ${values.name}`,
 			`Email: ${values.email}`,
 			`Phone: ${values.phone || 'Not provided'}`,
 			`Inquiry: ${values.inquiryType}`,
+			...(property
+				? [
+						`Property: ${property.title}`,
+						`Status: ${property.propertyStatus}`,
+						`Price: $${property.price}`,
+						`Location: ${property.location}`,
+					]
+				: []),
+			...(values.inquiryType === 'Request a viewing'
+				? [`Preferred viewing date: ${values.preferredDate || 'Flexible'}`]
+				: []),
 			'',
 			values.message,
 		].join('\n');
@@ -133,8 +159,24 @@ function ContactPage() {
 							<form
 								noValidate
 								onSubmit={handleSubmit(onSubmit)}
+								onChange={() => setPreparedEmail(null)}
 								className="mt-3 space-y-2"
 							>
+								{property && (
+									<div className="mb-3 rounded-lg border border-emerald-100 bg-emerald-50 p-3">
+										<p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-800">
+											Property details
+										</p>
+										<p className="mt-1 text-sm font-semibold text-slate-900">
+											{property.title}
+										</p>
+										<p className="mt-0.5 text-xs text-slate-600">
+											{property.location} · {property.propertyStatus} · $
+											{property.price}
+											{property.propertyStatus === 'For Rent' ? '/month' : ''}
+										</p>
+									</div>
+								)}
 								<div className="grid gap-2 sm:grid-cols-2">
 									<div>
 										<label className="relative block">
@@ -258,6 +300,23 @@ function ContactPage() {
 										</p>
 									)}
 								</div>
+
+								{selectedInquiryType === 'Request a viewing' && (
+									<div>
+										<label
+											htmlFor="preferred-viewing-date"
+											className="mb-1 block text-xs font-medium text-slate-700"
+										>
+											Preferred viewing date (optional)
+										</label>
+										<input
+											{...register('preferredDate')}
+											id="preferred-viewing-date"
+											type="date"
+											className="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-xs text-slate-700 outline-none focus:border-[#087A5B] focus:ring-2 focus:ring-emerald-100"
+										/>
+									</div>
+								)}
 
 								<div>
 									<label className="relative block">

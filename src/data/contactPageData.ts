@@ -61,6 +61,7 @@ export const contactQuickLinks = [
 ];
 
 export const contactInquiryTypes = [
+	{ value: 'Request a viewing', label: 'Request a viewing' },
 	{ value: 'Buying a property', label: 'Buying a property' },
 	{ value: 'Selling a property', label: 'Selling a property' },
 	{ value: 'Renting a property', label: 'Renting a property' },
@@ -71,7 +72,7 @@ export const contactFaqs = [
 	{
 		question: 'How do I schedule a property viewing?',
 		answer:
-			'Open a property listing and contact the assigned agent to arrange a viewing time that works for you.',
+			'Open a property listing, choose Request a Viewing, and send us your preferred date. Our team can follow up to coordinate a time.',
 	},
 	{
 		question: 'What documents do I need to buy a property?',

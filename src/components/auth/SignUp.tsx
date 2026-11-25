@@ -468,19 +468,17 @@ export default function SignUp() {
 
 								<span>
 									I agree to the{' '}
-									<a
-										href="#"
+									<span
 										className="font-medium text-emerald-700 underline underline-offset-2"
 									>
 										Terms of Service
-									</a>{' '}
+									</span>{' '}
 									and{' '}
-									<a
-										href="#"
+									<span
 										className="font-medium text-emerald-700 underline underline-offset-2"
 									>
 										Privacy Policy
-									</a>
+									</span>
 									.
 								</span>
 							</label>
@@ -538,19 +536,17 @@ export default function SignUp() {
 
 						<p className="pt-2 text-center text-[11px] leading-5 text-neutral-400">
 							By signing up, you agree to our{' '}
-							<a
-								href="#"
+							<span
 								className="text-emerald-700 underline underline-offset-2"
 							>
 								Terms of Service
-							</a>{' '}
+							</span>{' '}
 							and{' '}
-							<a
-								href="#"
+							<span
 								className="text-emerald-700 underline underline-offset-2"
 							>
 								Privacy Policy
-							</a>
+							</span>
 							.
 						</p>
 					</form>

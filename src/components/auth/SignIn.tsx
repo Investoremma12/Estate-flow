@@ -357,10 +357,10 @@ export default function SignIn() {
 								</label>
 
 								<Link
-									to="/forgot-password"
+									to="/contact"
 									className="text-xs font-medium text-emerald-700 transition-colors hover:text-emerald-800"
 								>
-									Forgot password?
+									Need help signing in?
 								</Link>
 							</div>
 
