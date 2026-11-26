@@ -69,6 +69,7 @@ function App() {
 						</ProtectedRoute>
 					}
 				/>
+				<Route path="favorite" element={<Navigate to="/favorites" replace />} />
 				<Route
 					path="about"
 					element={
